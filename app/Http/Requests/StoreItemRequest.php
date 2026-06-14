@@ -25,7 +25,6 @@ return [
 public function messages(){
 return [
 "name.required" => "Nama item wajib diisi.",
-// …
 ];
 }
 }

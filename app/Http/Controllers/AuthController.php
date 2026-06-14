@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller; // <-- TAMBAHKAN BARIS INI
 use App\Models\User; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash; 
@@ -16,7 +16,6 @@ class AuthController extends Controller
             'email'    => 'required|email|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
-
         $user = User::create([
             'name'     => $validated['name'],
             'email'    => $validated['email'],
@@ -31,14 +30,12 @@ class AuthController extends Controller
             'message' => 'User registered'
         ], 201);
     }
-
     public function login(Request $req) 
     {
         $req->validate([
             'email'    => 'required|email',
             'password' => 'required',
         ]);
-
         $user = User::where('email', $req->email)->first();
 
         if (! $user || ! Hash::check($req->password, $user->password)) {
@@ -46,12 +43,8 @@ class AuthController extends Controller
                 'email' => ['The provided credentials are incorrect.']
             ]);
         }
-
-        // Menghapus token lama agar tidak menumpuk di database
         $user->tokens()->delete();
-
         $token = $user->createToken('api-token')->plainTextToken;
-
         return response()->json([
             'status'  => 'success',
             'data'    => ['user' => $user, 'token' => $token],

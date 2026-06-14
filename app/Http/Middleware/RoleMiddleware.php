@@ -1,10 +1,8 @@
 <?php
-
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-
 class RoleMiddleware {
     public function handle(Request $request, Closure $next, string $role) {
         $user = $request->user();
@@ -15,8 +13,7 @@ class RoleMiddleware {
                 'data'    => null,
                 'message' => 'Unauthorized. Role '.$role.' required.'
             ], 403);
-        }
-        
+        }    
         return $next($request);
     }
 }

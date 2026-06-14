@@ -1,22 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\CategoryController;
 
-// Langkah 5: Public Routes (Bisa diakses tanpa login)
-Route::post('register', 'App\Http\Controllers\AuthController@register');
-Route::post('login', 'App\Http\Controllers\AuthController@login');
+Route::prefix('v1')->group(function () {
 
-// Langkah 6 & 9: Protected Routes (Dibungkus auth:sanctum)
-Route::middleware('auth:sanctum')->group(function () {
-    
-    // Resource Category (Kecuali fungsi destroy / delete)
-    Route::apiResource('categories', 'App\Http\Controllers\CategoryController')->except(['destroy']);
-    // Khusus route DELETE category hanya bisa diakses oleh admin
-    Route::delete('categories/{category}', 'App\Http\Controllers\CategoryController@destroy')->middleware('role:admin');
-    
-    // Resource Item (Kecuali fungsi destroy / delete)
-    Route::apiResource('items', 'App\Http\Controllers\ItemController')->except(['destroy']);
-    // Khusus route DELETE item hanya bisa diakses oleh admin
-    Route::delete('items/{item}', 'App\Http\Controllers\ItemController@destroy')->middleware('role:admin');
-    
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::apiResource('items', ItemController::class);
+    Route::apiResource('categories', CategoryController::class);
+
 });
