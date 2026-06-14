@@ -1,20 +1,16 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\CategoryController;
 
-Route::apiResource('categories', CategoryController::class);
-Route::apiResource('items', ItemController::class);
+Route::prefix('v1')->group(function () {
 
-Route::get('/identitas', function () {
-    return response()->json([
-        'pesan' => 'API Berhasil!',
-        'data' => [
-            'nama' => 'Rahmi Hamka',
-            'nim' => '131'
-        ]
-    ], 200);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::apiResource('items', ItemController::class);
+    Route::apiResource('categories', CategoryController::class);
+
 });
