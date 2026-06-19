@@ -4,13 +4,10 @@ use App\Models\Item;
 use Illuminate\Database\Eloquent\Collection;
 class ItemService
 {
-public function all($categoryId = null)
-{
-    // Jika ada categoryId, lakukan filter. Jika tidak, ambil semua data.
-    return \App\Models\Item::when($categoryId, function ($query) use ($categoryId) {
-        return $query->where('category_id', $categoryId);
-    })->get();
-}
+    public function all(): Collection
+    {
+        return Item::with('category')->get();
+    }
     public function find(int $id): Item
     {
         return Item::with('category')->findOrFail($id);
