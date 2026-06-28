@@ -35,6 +35,8 @@ class ItemController extends BaseController
 
     public function show($id)
     {
+        dd($request->all());
+        
         try {
             $item = $this->svc->find($id);
             return $this->success($item);
